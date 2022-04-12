@@ -1,14 +1,12 @@
-# TEMPLATE-APP: This is set as a reasonable default, feel free to change.
-
 name: cluster-shared
-serviceType: managed
 
 project:
   branch: "[[ .Branch ]]"
   commit: "[[ .SHA ]]"
 
-image:
+includeClusterResourceSet: true
+
+kubectlImage:
   registry: quay.io
-  name: giantswarm/cluster-shared
-  tag: v0.0.1
-  pullPolicy: IfNotPresent
+  name: giantswarm/kubectl
+  tag: 1.23.5
