@@ -13,6 +13,7 @@ workflows:
           app_catalog_test: "cluster-test-catalog"
           chart: "cluster-shared"
           persist_chart_archive: true
+          skip_conftest_deprek8ion: true
           # Trigger job on git tag.
           filters:
             tags:
