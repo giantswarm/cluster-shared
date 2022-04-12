@@ -7,3 +7,4 @@ home: https://github.com/giantswarm/cluster-shared
 version: [[ .Version ]]
 annotations:
   application.giantswarm.io/area: "kaas"
+  application.giantswarm.io/team: "phoenix"
