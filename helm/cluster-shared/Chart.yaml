@@ -1,0 +1,9 @@
+apiVersion: v2
+appVersion: 0.0.1
+type: library
+name: cluster-shared
+description: A library chart of shared CAPI cluster helpers
+home: https://github.com/giantswarm/cluster-shared
+version: [[ .Version ]]
+annotations:
+  application.giantswarm.io/area: "kaas"
