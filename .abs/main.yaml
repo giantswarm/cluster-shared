@@ -2,3 +2,4 @@ replace-chart-version-with-git: true
 generate-metadata: true
 chart-dir: ./helm/cluster-shared
 destination: ./build
+disable-giantswarm-helm-validator: true
