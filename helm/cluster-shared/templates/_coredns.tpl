@@ -1,11 +1,12 @@
+{{ define "coredns" }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "cluster-shared.resource.default.name" . }}-coredns
+  name: {{ include "resource.default.name" . }}-coredns
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "cluster-shared.labels.common" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
 data:
   coredns.yml: |
     apiVersion: v1
@@ -14,7 +15,7 @@ data:
       name: coredns
       namespace: kube-system
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
         app.kubernetes.io/managed-by: Helm
       annotations:
         meta.helm.sh/release-name: coredns
@@ -26,7 +27,7 @@ data:
       namespace: kube-system
       name: coredns
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
         app.kubernetes.io/managed-by: Helm
       annotations:
         meta.helm.sh/release-name: coredns
@@ -60,7 +61,7 @@ data:
       name: coredns-adopter
       namespace: kube-system
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
     ---
 {{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
     apiVersion: policy/v1beta1
@@ -68,7 +69,7 @@ data:
     metadata:
       name: coredns
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
         app.kubernetes.io/managed-by: Helm
       annotations:
         meta.helm.sh/release-name: coredns
@@ -108,7 +109,7 @@ data:
     metadata:
       name: coredns-psp-user
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
         app.kubernetes.io/managed-by: Helm
       annotations:
         meta.helm.sh/release-name: coredns
@@ -128,7 +129,7 @@ data:
     metadata:
       name: coredns-psp
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
         app.kubernetes.io/managed-by: Helm
       annotations:
         meta.helm.sh/release-name: coredns
@@ -147,7 +148,7 @@ data:
     metadata:
       name: coredns-adopter
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
     spec:
       hostNetwork: true
       privileged: false
@@ -182,7 +183,7 @@ data:
     metadata:
       name: coredns-adopter
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
     rules:
     - apiGroups: ["*"]
       resources: ["*"]
@@ -214,7 +215,7 @@ data:
     metadata:
       name: coredns-adopter
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
     subjects:
     - kind: ServiceAccount
       name: coredns-adopter
@@ -229,7 +230,7 @@ data:
     metadata:
       name: coredns-adopter-rbac
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
     subjects:
     - kind: ServiceAccount
       name: coredns-adopter
@@ -245,7 +246,7 @@ data:
       name: coredns-adopter
       namespace: kube-system
       labels:
-        {{- include "cluster-shared.labels.common" . | nindent 8 }}
+        {{- include "labels.common" . | nindent 8 }}
       annotations:
         kubernetes.io/description: |
           Runs at cluster creation to label and annotate default, kubeadm installed CoreDNS
@@ -256,7 +257,7 @@ data:
         metadata:
           name: coredns-adopter
           labels:
-            {{- include "cluster-shared.labels.common" . | nindent 12 }}
+            {{- include "labels.common" . | nindent 12 }}
           annotations:
             kubernetes.io/description: |
               Runs at cluster creation to label and annotate default, kubeadm installed CoreDNS
@@ -313,20 +314,21 @@ data:
               kubectl -n kube-system delete deployment coredns
               kubectl apply -f /tmp/dep.yaml
 ---
-{{- if .Values.includeClusterResourceSet }}
+{{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 apiVersion: addons.cluster.x-k8s.io/v1beta1
 kind: ClusterResourceSet
 metadata:
-  name: {{ include "cluster-shared.resource.default.name" . }}-coredns
+  name: {{ include "resource.default.name" . }}-coredns
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "cluster-shared.labels.common" . | nindent 4 }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   clusterSelector:
     matchLabels:
-      {{- include "cluster-shared.labels.common" . | nindent 6 }}
+      {{- include "labels.common" . | nindent 6 }}
   resources:
   - kind: ConfigMap
-    name: {{ include "cluster-shared.resource.default.name" . }}-coredns
+    name: {{ include "resource.default.name" . }}-coredns
 ---
 {{- end -}}
+{{ end }}
