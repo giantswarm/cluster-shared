@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Reverted back to library chart to make use of parent chart templates
+- Defaulting of expected values handled in templates (as library charts don't have values.yaml)
+
 ## [0.2.1] - 2022-04-13
 
 ### Fixed
