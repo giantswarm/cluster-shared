@@ -23,7 +23,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
 app.kubernetes.io/version: {{ .Chart.Version | quote }}
 cluster.x-k8s.io/cluster-name: {{ include "cluster-shared.resource.default.name" . | quote }}
 giantswarm.io/cluster: {{ include "cluster-shared.resource.default.name" . | quote }}
-giantswarm.io/organization: {{ .Values.global.organization | quote }}
 helm.sh/chart: {{ include "cluster-shared.chart" . | quote }}
 {{- end -}}
 
@@ -34,5 +33,5 @@ Given that Kubernetes allows 63 characters for resource names, the stem is trunc
 room for such suffix.
 */}}
 {{- define "cluster-shared.resource.default.name" -}}
-{{ required "Please provide a clusterName value" .Values.global.clusterName }}
+{{- .Release.Name | replace "." "-" | trunc 47 | trimSuffix "-" -}}
 {{- end -}}
