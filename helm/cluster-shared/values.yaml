@@ -1,4 +1,5 @@
 name: cluster-shared
+clusterName: ""
 
 project:
   branch: "[[ .Branch ]]"
@@ -10,3 +11,6 @@ kubectlImage:
   registry: quay.io
   name: giantswarm/kubectl
   tag: 1.23.5
+
+global:
+  clusterName: ""
