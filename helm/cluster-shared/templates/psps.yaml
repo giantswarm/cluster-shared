@@ -3,10 +3,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "resource.default.name" $ }}-psps
+  name: {{ include "cluster-shared.resource.default.name" . }}-psps
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "labels.common" $ | nindent 4 }}
+    {{- include "cluster-shared.labels.common" . | nindent 4 }}
 data:
   standard_psps.yml: |
     apiVersion: policy/v1beta1
@@ -14,7 +14,7 @@ data:
     metadata:
       name: privileged
       labels:
-        {{- include "labels.common" $ | nindent 8 }}
+        {{- include "cluster-shared.labels.common" . | nindent 8 }}
       annotations:
         seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
     spec:
@@ -44,7 +44,7 @@ data:
     metadata:
       name: restricted
       labels:
-        {{- include "labels.common" $ | nindent 8 }}
+        {{- include "cluster-shared.labels.common" . | nindent 8 }}
     spec:
       privileged: false
       allowPrivilegeEscalation: false
@@ -79,7 +79,7 @@ data:
     metadata:
       name: privileged-psp-user
       labels:
-        {{- include "labels.common" $ | nindent 8 }}
+        {{- include "cluster-shared.labels.common" . | nindent 8 }}
     rules:
     - apiGroups:
       - extensions
@@ -95,7 +95,7 @@ data:
     metadata:
       name: privileged-psp-users
       labels:
-        {{- include "labels.common" $ | nindent 8 }}
+        {{- include "cluster-shared.labels.common" . | nindent 8 }}
     subjects:
     - kind: ServiceAccount
       name: kube-proxy
@@ -118,7 +118,7 @@ data:
     metadata:
       name: restricted-psp-user
       labels:
-        {{- include "labels.common" $ | nindent 8 }}
+        {{- include "cluster-shared.labels.common" . | nindent 8 }}
     rules:
     - apiGroups:
       - extensions
@@ -134,7 +134,7 @@ data:
     metadata:
       name: restricted-psp-users
       labels:
-        {{- include "labels.common" $ | nindent 8 }}
+        {{- include "cluster-shared.labels.common" . | nindent 8 }}
     subjects:
     - kind: Group
       apiGroup: rbac.authorization.k8s.io
@@ -148,17 +148,17 @@ data:
 apiVersion: addons.cluster.x-k8s.io/v1beta1
 kind: ClusterResourceSet
 metadata:
-  name: {{ include "resource.default.name" $ }}-psps
+  name: {{ include "cluster-shared.resource.default.name" . }}-psps
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "labels.common" $ | nindent 4 }}
+    {{- include "cluster-shared.labels.common" . | nindent 4 }}
 spec:
   clusterSelector:
     matchLabels:
-      {{- include "labels.common" $ | nindent 6 }}
+      {{- include "cluster-shared.labels.common" . | nindent 6 }}
   resources:
   - kind: ConfigMap
-    name: {{ include "resource.default.name" $ }}-psps
+    name: {{ include "cluster-shared.resource.default.name" . }}-psps
 ---
 {{- end -}}
 {{- end -}}
