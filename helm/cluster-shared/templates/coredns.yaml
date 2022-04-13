@@ -1,4 +1,3 @@
-{{- define "shared.coredns-adopter" }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -330,5 +329,4 @@ spec:
   - kind: ConfigMap
     name: {{ include "resource.default.name" $ }}-coredns
 ---
-{{- end -}}
 {{- end -}}

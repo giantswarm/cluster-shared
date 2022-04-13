@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Switched from library chart to standard chart to make use of templates and local values.yaml file
+
 ## [0.1.1] - 2022-04-12
 
 ### Fixed
