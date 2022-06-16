@@ -325,7 +325,7 @@ metadata:
 spec:
   clusterSelector:
     matchLabels:
-      {{- include "labels.common" . | nindent 6 }}
+      {{- include "labels.selector" . | nindent 6 }}
   resources:
   - kind: ConfigMap
     name: {{ include "resource.default.name" . }}-coredns
