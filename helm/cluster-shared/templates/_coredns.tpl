@@ -310,6 +310,7 @@ data:
               kubectl -n kube-system get deployment coredns -o yaml \
                 | sed 's/  k8s-app: kube-dns/  k8s-app: coredns/' \
                 | sed 's/ containerPort: 53/ containerPort: 1053/' \
+                | sed 's/ name: coredns/ name: coredns-workers/' \
                 | tee /tmp/dep.yaml
               kubectl -n kube-system delete deployment coredns
               kubectl apply -f /tmp/dep.yaml
