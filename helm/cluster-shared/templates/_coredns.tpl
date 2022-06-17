@@ -187,7 +187,7 @@ data:
     rules:
     - apiGroups: ["*"]
       resources: ["*"]
-      resourceNames: ["coredns", "kube-dns", "system:coredns"]
+      resourceNames: ["coredns", "coredns-workers", "kube-dns", "system:coredns"]
       verbs: ["get", "list", "update", "patch"]
     - apiGroups: [""]
       resources: ["services"]
