@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Sed replace for deployment name
+
 ## [0.4.2] - 2022-06-17
 
 ### Fixed
