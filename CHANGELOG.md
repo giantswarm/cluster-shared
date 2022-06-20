@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bumped kubectl version to latest so the image includes `jq`
+- Simplified the ClusterRole permissions
+- Refactored the existing resource patch logic and used `jq` to more reliably modify the existing resources
+
 ## [0.4.3] - 2022-06-17
 
 ### Fixed

@@ -6,7 +6,7 @@
 {{- define "cluster-shared.kubectl-image" -}}
 {{- $kubectlRegistry := "quay.io" -}}
 {{- $kubectlName := "giantswarm/kubectl" -}}
-{{- $kubectlTag := "1.23.5" -}}
+{{- $kubectlTag := "1.24.1" -}}
 {{- if not .Values.kubectlImage }}
 quay.io/giantswarm/kubectl:1.23.5
 {{- else }}

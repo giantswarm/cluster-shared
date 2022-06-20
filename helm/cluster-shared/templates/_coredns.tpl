@@ -187,28 +187,8 @@ data:
     rules:
     - apiGroups: ["*"]
       resources: ["*"]
-      resourceNames: ["coredns", "coredns-workers", "kube-dns", "system:coredns"]
-      verbs: ["get", "list", "update", "patch"]
-    - apiGroups: [""]
-      resources: ["services"]
-      resourceNames: ["kube-dns"]
-      verbs: ["delete"]
-    - apiGroups: ["apps"]
-      resources: ["deployments"]
-      resourceNames: ["coredns"]
-      verbs: ["delete"]
-    - apiGroups: [""]
-      resources: ["services"]
-      verbs: ["create"]
-    - apiGroups: ["apps"]
-      resources: ["deployments"]
-      verbs: ["create"]
-{{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
-    - apiGroups: ["extensions"]
-      resources: ["podsecuritypolicies"]
-      resourceNames: ["coredns-adopter"]
-      verbs: ["use"]
-{{- end }}
+      resourceNames: ["coredns", "coredns-workers", "kube-dns", "system:coredns", "coredns-adopter"]
+      verbs: ["*"]
     ---
     kind: ClusterRoleBinding
     apiVersion: rbac.authorization.k8s.io/v1
@@ -276,41 +256,35 @@ data:
             - -c
             - |
               sleep 60
-              RESOURCES=(
-                "configmap coredns"
-                "serviceaccount coredns"
-                "service kube-dns"
-                "deployment coredns"
-              )
-              for RESOURCE in "${RESOURCES[@]}"
-              do
-                kubectl -n kube-system annotate --overwrite ${RESOURCE} meta.helm.sh/release-name=coredns
-                kubectl -n kube-system annotate --overwrite ${RESOURCE} meta.helm.sh/release-namespace=kube-system
-                kubectl -n kube-system label --overwrite ${RESOURCE} app.kubernetes.io/managed-by=Helm
-              done
 
-              RESOURCES=(
-                "clusterrole system:coredns"
-                "clusterrolebinding system:coredns"
-              )
-              for RESOURCE in "${RESOURCES[@]}"
-              do
+              function patchResource() {
                 kubectl annotate --overwrite ${RESOURCE} meta.helm.sh/release-name=coredns
                 kubectl annotate --overwrite ${RESOURCE} meta.helm.sh/release-namespace=kube-system
                 kubectl label --overwrite ${RESOURCE} app.kubernetes.io/managed-by=Helm
+                kubectl label --overwrite ${RESOURCE} k8s-app=coredns
+              }
+
+              NAMES="configmap,secret,serviceaccount,service,deployment,clusterrole,clusterrolebinding,horizontalpodautoscaler,networkpolicy,daemonset"
+
+              RESOURCES=$(kubectl get "${NAMES::${#NAMES}-1}" --ignore-not-found -l k8s-app=coredns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
+              RESOURCES=${RESOURCES}$(kubectl get "${NAMES::${#NAMES}-1}" --ignore-not-found -l k8s-app=kube-dns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
+              for RESOURCE in ${RESOURCES}
+              do
+                patchResource ${RESOURCE}
               done
 
-              kubectl -n kube-system get service kube-dns -o yaml \
-                | sed 's/  name: kube-dns/  name: coredns/' \
-                | sed 's/  k8s-app: kube-dns/  k8s-app: coredns/' \
+              kubectl -n kube-system get service kube-dns -o json \
+                | jq '.metadata.name="coredns"' \
+                | jq '(. | .spec.ports[] | select(.targetPort==53)).targetPort |= 1053' \
                 | tee /tmp/svc.yaml
               kubectl -n kube-system delete service kube-dns
               kubectl apply -f /tmp/svc.yaml
 
-              kubectl -n kube-system get deployment coredns -o yaml \
-                | sed 's/  k8s-app: kube-dns/  k8s-app: coredns/' \
-                | sed 's/ containerPort: 53/ containerPort: 1053/' \
-                | sed 's/^  name: coredns/  name: coredns-workers/' \
+              kubectl -n kube-system get deployment coredns -o json \
+                | jq '.metadata.name="coredns-workers"' \
+                | jq '(. | .spec.template.spec.containers[0].ports[] | select(.containerPort==53)).containerPort |= 1053' \
+                | jq '.metadata.labels."app.kubernetes.io/component"="workers"' \
+                | jq '.spec.selector.matchLabels."app.kubernetes.io/component"="workers" | .spec.selector.matchLabels."k8s-app"="coredns"' \
                 | tee /tmp/dep.yaml
               kubectl -n kube-system delete deployment coredns
               kubectl apply -f /tmp/dep.yaml
