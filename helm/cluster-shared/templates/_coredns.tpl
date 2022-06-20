@@ -258,10 +258,10 @@ data:
               sleep 60
 
               function patchResource() {
-                kubectl annotate --overwrite ${RESOURCE} meta.helm.sh/release-name=coredns
-                kubectl annotate --overwrite ${RESOURCE} meta.helm.sh/release-namespace=kube-system
-                kubectl label --overwrite ${RESOURCE} app.kubernetes.io/managed-by=Helm
-                kubectl label --overwrite ${RESOURCE} k8s-app=coredns
+                kubectl annotate --overwrite $1 meta.helm.sh/release-name=coredns
+                kubectl annotate --overwrite $1 meta.helm.sh/release-namespace=kube-system
+                kubectl label --overwrite $1 app.kubernetes.io/managed-by=Helm
+                kubectl label --overwrite $1 k8s-app=coredns
               }
 
               NAMES="configmap,secret,serviceaccount,service,deployment,clusterrole,clusterrolebinding,horizontalpodautoscaler,networkpolicy,daemonset"
