@@ -195,6 +195,9 @@ data:
     - apiGroups: ["apps"]
       resources: ["deployments"]
       verbs: ["create"]
+    - apiGroups: [""]
+      resources: ["services"]
+      verbs: ["create"]
     ---
     kind: ClusterRoleBinding
     apiVersion: rbac.authorization.k8s.io/v1
