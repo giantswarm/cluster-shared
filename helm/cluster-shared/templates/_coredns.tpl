@@ -276,6 +276,7 @@ data:
               kubectl -n kube-system get service kube-dns -o json \
                 | jq '.metadata.name="coredns"' \
                 | jq '(. | .spec.ports[] | select(.targetPort==53)).targetPort |= 1053' \
+                | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/svc.yaml
               kubectl -n kube-system delete service kube-dns
               kubectl apply -f /tmp/svc.yaml
@@ -285,6 +286,7 @@ data:
                 | jq '(. | .spec.template.spec.containers[0].ports[] | select(.containerPort==53)).containerPort |= 1053' \
                 | jq '.metadata.labels."app.kubernetes.io/component"="workers"' \
                 | jq '.spec.selector.matchLabels."app.kubernetes.io/component"="workers" | .spec.selector.matchLabels."k8s-app"="coredns"' \
+                | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/dep.yaml
               kubectl -n kube-system delete deployment coredns
               kubectl apply -f /tmp/dep.yaml
