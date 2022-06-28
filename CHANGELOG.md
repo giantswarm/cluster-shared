@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Updated RBAC permissions of coredns-adopter to allow for listing resources
+
 ## [0.5.2] - 2022-06-28
 
 ### Fixed

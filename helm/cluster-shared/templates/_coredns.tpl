@@ -185,10 +185,13 @@ data:
       labels:
         {{- include "labels.common" . | nindent 8 }}
     rules:
-    - apiGroups: ["*"]
+    - apiGroups: ["", "*"]
       resources: ["*"]
       resourceNames: ["coredns", "coredns-workers", "kube-dns", "system:coredns", "coredns-adopter"]
       verbs: ["*"]
+    - apiGroups: [""]
+      resources: ["*"]
+      verbs: ["list"]
     ---
     kind: ClusterRoleBinding
     apiVersion: rbac.authorization.k8s.io/v1
@@ -266,8 +269,8 @@ data:
 
               NAMES="configmap,secret,serviceaccount,service,deployment,clusterrole,clusterrolebinding,horizontalpodautoscaler,networkpolicy,daemonset"
 
-              RESOURCES=$(kubectl get "${NAMES::${#NAMES}-1}" --ignore-not-found -l k8s-app=coredns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
-              RESOURCES=${RESOURCES}$(kubectl get "${NAMES::${#NAMES}-1}" --ignore-not-found -l k8s-app=kube-dns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
+              RESOURCES=$(kubectl get "${NAMES}" --ignore-not-found -l k8s-app=coredns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
+              RESOURCES=${RESOURCES}$(kubectl get "${NAMES}" --ignore-not-found -l k8s-app=kube-dns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
               for RESOURCE in ${RESOURCES}
               do
                 patchResource ${RESOURCE}
