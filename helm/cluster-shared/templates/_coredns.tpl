@@ -279,6 +279,7 @@ data:
               kubectl -n kube-system get service kube-dns -o json \
                 | jq '.metadata.name="coredns"' \
                 | jq '(. | .spec.ports[] | select(.targetPort==53)).targetPort |= 1053' \
+                | jq '.spec.selector."k8s-app"="coredns"' \
                 | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/svc.yaml
               kubectl -n kube-system delete service kube-dns
