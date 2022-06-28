@@ -189,9 +189,12 @@ data:
       resources: ["*"]
       resourceNames: ["coredns", "coredns-workers", "kube-dns", "system:coredns", "coredns-adopter"]
       verbs: ["*"]
-    - apiGroups: [""]
+    - apiGroups: ["", "*"]
       resources: ["*"]
       verbs: ["list"]
+    - apiGroups: ["apps"]
+      resources: ["deployments"]
+      verbs: ["create"]
     ---
     kind: ClusterRoleBinding
     apiVersion: rbac.authorization.k8s.io/v1
