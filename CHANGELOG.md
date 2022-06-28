@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Added component label to pod template in deployment
+
 ## [0.5.3] - 2022-06-28
 
 ### Fixed

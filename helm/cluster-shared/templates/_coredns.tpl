@@ -261,38 +261,47 @@ data:
               sleep 60
 
               function patchResource() {
-                kubectl annotate --overwrite $1 meta.helm.sh/release-name=coredns
-                kubectl annotate --overwrite $1 meta.helm.sh/release-namespace=kube-system
-                kubectl label --overwrite $1 app.kubernetes.io/managed-by=Helm
-                kubectl label --overwrite $1 k8s-app=coredns
+                echo "Patching resource ${1}"
+                kubectl annotate --overwrite $@ meta.helm.sh/release-name=coredns
+                kubectl annotate --overwrite $@ meta.helm.sh/release-namespace=kube-system
+                kubectl label --overwrite $@ app.kubernetes.io/managed-by=Helm
+                kubectl label --overwrite $@ k8s-app=coredns
               }
 
-              NAMES="configmap,secret,serviceaccount,service,deployment,clusterrole,clusterrolebinding,horizontalpodautoscaler,networkpolicy,daemonset"
+              echo "Patching existing coredns resources..."
+              patchResource configmap/coredns -n kube-system
+              patchResource serviceaccount/coredns -n kube-system
+              patchResource service/kube-dns -n kube-system
+              patchResource deployment/coredns -n kube-system
+              patchResource clusterrole/system:coredns
+              patchResource clusterrolebinding/system:coredns
+              echo "Finished patching"
 
-              RESOURCES=$(kubectl get "${NAMES}" --ignore-not-found -l k8s-app=coredns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
-              RESOURCES=${RESOURCES}$(kubectl get "${NAMES}" --ignore-not-found -l k8s-app=kube-dns -A -o go-template='{{range.items}}-n {{.metadata.namespace}} {{.kind}}.{{.apiVersion}}/{{.metadata.name}}{{"\n"}}{{end}}' 2>/dev/null | tr '[:upper:]' '[:lower:]' | sed -r "s|/(v.+)/|/|g")
-              for RESOURCE in ${RESOURCES}
-              do
-                patchResource ${RESOURCE}
-              done
-
+              echo "Updating coredns service..."
               kubectl -n kube-system get service kube-dns -o json \
                 | jq '.metadata.name="coredns"' \
                 | jq '(. | .spec.ports[] | select(.targetPort==53)).targetPort |= 1053' \
+                | jq '.spec.selector."k8s-app"="coredns"' \
                 | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/svc.yaml
               kubectl -n kube-system delete service kube-dns
               kubectl apply -f /tmp/svc.yaml
+              echo "Finished updating coredns service"
 
+              echo "Updating coredns deployment..."
               kubectl -n kube-system get deployment coredns -o json \
                 | jq '.metadata.name="coredns-workers"' \
                 | jq '(. | .spec.template.spec.containers[0].ports[] | select(.containerPort==53)).containerPort |= 1053' \
                 | jq '.metadata.labels."app.kubernetes.io/component"="workers"' \
+                | jq '.spec.template.metadata.labels."app.kubernetes.io/component"="workers" | .spec.template.metadata.labels."k8s-app"="coredns"' \
                 | jq '.spec.selector.matchLabels."app.kubernetes.io/component"="workers" | .spec.selector.matchLabels."k8s-app"="coredns"' \
                 | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/dep.yaml
               kubectl -n kube-system delete deployment coredns
               kubectl apply -f /tmp/dep.yaml
+              echo "Finished updating coredns deployment"
+
+              echo "CoreDNS adoption complete!"
 ---
 {{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 apiVersion: addons.cluster.x-k8s.io/v1beta1
