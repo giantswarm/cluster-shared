@@ -288,7 +288,7 @@ data:
                 | jq '.metadata.name="coredns-workers"' \
                 | jq '(. | .spec.template.spec.containers[0].ports[] | select(.containerPort==53)).containerPort |= 1053' \
                 | jq '.metadata.labels."app.kubernetes.io/component"="workers"' \
-                | jq '.spec.template.metadata.labels."app.kubernetes.io/component"="workers"' \
+                | jq '.spec.template.metadata.labels."app.kubernetes.io/component"="workers" | .spec.template.metadata.labels."k8s-app"="coredns"' \
                 | jq '.spec.selector.matchLabels."app.kubernetes.io/component"="workers" | .spec.selector.matchLabels."k8s-app"="coredns"' \
                 | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/dep.yaml
