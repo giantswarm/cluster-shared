@@ -304,7 +304,7 @@ data:
                 | jq '.metadata.labels."app.kubernetes.io/component"="workers"' \
                 | jq '.spec.template.metadata.labels."app.kubernetes.io/component"="workers" | .spec.template.metadata.labels."k8s-app"="coredns"' \
                 | jq '.spec.selector.matchLabels."app.kubernetes.io/component"="workers" | .spec.selector.matchLabels."k8s-app"="coredns"' \
-                | jq '.spec.template.containers[0].args += ["-dns.port", "1053"]' \
+                | jq '.spec.template.spec.containers[0].args += ["-dns.port", "1053"]' \
                 | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/dep.yaml
               kubectl -n kube-system delete deployment coredns
