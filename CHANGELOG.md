@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The `configMap` for Workload Clusters will only be generated if the Management Cluster has the `ClusterResourceSet` capability.
+
+### Fixed
+
+- if `kubectl` image isn't specified, a default image will be used
+
 ## [0.5.7] - 2022-06-29
 
 ### Fixed

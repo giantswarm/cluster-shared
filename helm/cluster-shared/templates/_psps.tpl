@@ -1,5 +1,6 @@
 {{ define "psps" }}
-{{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
+{{- if .Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta1/ClusterResourceSet" }}
+{{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -145,7 +146,6 @@ data:
       kind: ClusterRole
       name: restricted-psp-user
 ---
-{{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 apiVersion: addons.cluster.x-k8s.io/v1beta1
 kind: ClusterResourceSet
 metadata:
