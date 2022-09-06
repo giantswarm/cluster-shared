@@ -267,11 +267,15 @@ data:
               sleep 60
 
               function patchResource() {
-                echo "Patching resource ${1}"
-                kubectl annotate --overwrite $@ meta.helm.sh/release-name=coredns
-                kubectl annotate --overwrite $@ meta.helm.sh/release-namespace=kube-system
-                kubectl label --overwrite $@ app.kubernetes.io/managed-by=Helm
-                kubectl label --overwrite $@ k8s-app=coredns
+                if kubectl get $@ &>/dev/null; then
+                  echo "Patching resource ${1}"
+                  kubectl annotate --overwrite $@ meta.helm.sh/release-name=coredns
+                  kubectl annotate --overwrite $@ meta.helm.sh/release-namespace=kube-system
+                  kubectl label --overwrite $@ app.kubernetes.io/managed-by=Helm
+                  kubectl label --overwrite $@ k8s-app=coredns
+                else
+                  echo "resource ${1} doesn't exist!"
+                fi
               }
 
               echo "Patching existing coredns resources..."
