@@ -275,6 +275,7 @@ data:
               }
 
               echo "Patching existing coredns resources..."
+              patchResource netpol/coredns -n kube-system
               patchResource configmap/coredns -n kube-system
               patchResource serviceaccount/coredns -n kube-system
               patchResource service/kube-dns -n kube-system
