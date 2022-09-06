@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2022-09-06
+
 ### Changed
 
 - The `configMap` for Workload Clusters will only be generated if the Management Cluster has the `ClusterResourceSet` capability.
@@ -123,7 +125,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default PSPs ClusterResourceSet
 - CoreDNS-adopter ClusterResourceSet
 
-[Unreleased]: https://github.com/giantswarm/cluster-shared/compare/v0.5.7...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-shared/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/giantswarm/cluster-shared/compare/v0.5.7...v0.6.0
 [0.5.7]: https://github.com/giantswarm/cluster-shared/compare/v0.5.6...v0.5.7
 [0.5.6]: https://github.com/giantswarm/cluster-shared/compare/v0.5.5...v0.5.6
 [0.5.5]: https://github.com/giantswarm/cluster-shared/compare/v0.5.4...v0.5.5
