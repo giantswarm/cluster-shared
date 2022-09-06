@@ -4,12 +4,8 @@
 {{- end }}
 
 {{- define "cluster-shared.kubectl-image" -}}
-{{- $kubectlRegistry := "quay.io" -}}
-{{- $kubectlName := "giantswarm/kubectl" -}}
-{{- $kubectlTag := "1.24.1" -}}
-{{- if not .Values.kubectlImage }}
-quay.io/giantswarm/kubectl:1.23.5
-{{- else }}
-{{ .Values.kubectlImage.registry | default $kubectlRegistry }}/{{ .Values.kubectlImage.name | default $kubectlName }}:{{ .Values.kubectlImage.tag | default $kubectlTag}}
-{{- end }}
+{{- $kubectlImageRegistry := "quay.io" -}}
+{{- $kubectlImageName := "giantswarm/kubectl" -}}
+{{- $kubectlImageTag := "1.24.1" -}}
+{{ .Values.kubectlImage.registry | default $kubectlImageRegistry }}/{{ .Values.kubectlImage.name | default $kubectlImageName }}:{{ .Values.kubectlImage.tag | default $kubectlImageTag}}
 {{- end }}

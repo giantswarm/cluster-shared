@@ -1,4 +1,6 @@
 {{ define "coredns" }}
+{{- if .Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta1/ClusterResourceSet" }}
+{{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -63,7 +65,6 @@ data:
       labels:
         {{- include "labels.common" . | nindent 8 }}
     ---
-{{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
     apiVersion: policy/v1beta1
     kind: PodSecurityPolicy
     metadata:
@@ -177,7 +178,6 @@ data:
       hostIPC: false
       readOnlyRootFilesystem: false
     ---
-{{- end }}
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRole
     metadata:
@@ -259,7 +259,7 @@ data:
           hostNetwork: true # No need to wait for CNI to be ready
           containers:
           - name: kubectl
-            image: "{{ .Values.kubectlImage.registry }}/{{ .Values.kubectlImage.name }}:{{ .Values.kubectlImage.tag }}"
+            image: "{{ include "cluster-shared.kubectl-image" . }}"
             command:
             - bash
             - -c
@@ -313,7 +313,6 @@ data:
 
               echo "CoreDNS adoption complete!"
 ---
-{{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 apiVersion: addons.cluster.x-k8s.io/v1beta1
 kind: ClusterResourceSet
 metadata:
@@ -329,5 +328,6 @@ spec:
   - kind: ConfigMap
     name: {{ include "resource.default.name" . }}-coredns
 ---
+{{- end -}}
 {{- end -}}
 {{ end }}
