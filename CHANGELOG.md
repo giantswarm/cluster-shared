@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2022-09-13
+
 ### Fixed
 
 - Adopt `netpol/coredns` otherwise coredns-App will fail to install.
@@ -130,7 +132,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default PSPs ClusterResourceSet
 - CoreDNS-adopter ClusterResourceSet
 
-[Unreleased]: https://github.com/giantswarm/cluster-shared/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-shared/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/giantswarm/cluster-shared/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/giantswarm/cluster-shared/compare/v0.5.7...v0.6.0
 [0.5.7]: https://github.com/giantswarm/cluster-shared/compare/v0.5.6...v0.5.7
 [0.5.6]: https://github.com/giantswarm/cluster-shared/compare/v0.5.5...v0.5.6
