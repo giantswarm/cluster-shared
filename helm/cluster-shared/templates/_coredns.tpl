@@ -289,7 +289,7 @@ data:
               echo "Finished patching"
 
               # Change port specified in Corefile config
-              kubectl -n kube-system get configmap coredns -o yaml | sed 's/.:53/.:1053/' | kubectl apply -f -
+              kubectl -n kube-system get configmap coredns -o yaml | sed 's/\.:53/\.:1053/' | kubectl apply -f -
 
               echo "Updating coredns service..."
               kubectl -n kube-system get service kube-dns -o json \

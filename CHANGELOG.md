@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Adopt `netpol/coredns` otherwise coredns-App will fail to install.
+- Need to escape dots when replacing the coredns port.
 
 ## [0.6.0] - 2022-09-06
 
