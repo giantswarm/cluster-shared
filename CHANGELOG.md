@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The `kube-dns` service will not be generated anymore. This change was only required for already existing clusters with customer workload.
+
 ## [0.6.2] - 2022-09-22
 
 ### Changed
