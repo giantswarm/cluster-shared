@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Keep the `kube-dns` service with updated label selector.
+
 ## [0.6.1] - 2022-09-13
 
 ### Fixed
