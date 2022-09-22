@@ -298,14 +298,8 @@ data:
                 | jq '.spec.selector."k8s-app"="coredns"' \
                 | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp)' \
                 | tee /tmp/svc.yaml
-              kubectl -n kube-system get service kube-dns -o json \
-                | jq '.spec.selector."k8s-app"="coredns"' \
-                | jq '(. | .spec.ports[] | select(.targetPort==53)).targetPort |= 1053' \
-                | jq 'del(.status, .metadata.uid, .metadata.resourceVersion, .metadata.generation, .metadata.creationTimestamp, .spec.clusterIP, .spec.clusterIPs, .metadata.labels, .metadata.annotations)' \
-                | tee /tmp/svc-kubedns.yaml
               kubectl -n kube-system delete service kube-dns
               kubectl apply -f /tmp/svc.yaml
-              kubectl apply -f /tmp/svc-kubedns.yaml
               echo "Finished updating coredns service"
 
               echo "Updating coredns deployment..."
