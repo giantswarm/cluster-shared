@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The `kube-dns` service will not be generated anymore. This change was only required for already existing clusters with customer workload.
+- The `coredns-adopter` script will fail on error.
 
 ## [0.6.2] - 2022-09-22
 

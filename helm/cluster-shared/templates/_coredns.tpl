@@ -264,6 +264,7 @@ data:
             - bash
             - -c
             - |
+              set -e
               sleep 60
 
               function patchResource() {
