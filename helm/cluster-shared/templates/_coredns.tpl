@@ -252,11 +252,24 @@ data:
               Runs at cluster creation to label and annotate default, kubeadm installed CoreDNS
               resources so they can be managed by Helm and replaced with our managed app.
         spec:
+          activeDeadlineSeconds: 1800 # 30 minutes
           restartPolicy: Never
           serviceAccountName: coredns-adopter
           tolerations:
           - operator: Exists
           hostNetwork: true # No need to wait for CNI to be ready
+          initContainers:
+          - name: wait-for-apiserver
+            image: "{{ include "cluster-shared.kubectl-image" . }}"
+            command:
+            - bash
+            - -c
+            - |
+              set -e
+              while [[ "$(kubectl -n default get service kubernete -o name 2>/dev/null)" != "service/kubernetes" ]]; do
+                echo "Waiting for API server to be ready..."
+                sleep 10
+              done
           containers:
           - name: kubectl
             image: "{{ include "cluster-shared.kubectl-image" . }}"
@@ -265,7 +278,6 @@ data:
             - -c
             - |
               set -e
-              sleep 60
 
               function patchResource() {
                 if kubectl get $@ &>/dev/null; then
