@@ -198,6 +198,10 @@ data:
     - apiGroups: [""]
       resources: ["services"]
       verbs: ["create"]
+    - apiGroups: [""]
+      resources: ["services"]
+      resourceNames: ["kubernetes"]
+      verbs: ["get"]
     ---
     kind: ClusterRoleBinding
     apiVersion: rbac.authorization.k8s.io/v1
