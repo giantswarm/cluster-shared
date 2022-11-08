@@ -270,7 +270,7 @@ data:
             - -c
             - |
               set -e
-              while [[ "$(kubectl -n default get service kubernete -o name 2>/dev/null)" != "service/kubernetes" ]]; do
+              while [[ "$(kubectl -n default get service kubernetes -o name 2>/dev/null)" != "service/kubernetes" ]]; do
                 echo "Waiting for API server to be ready..."
                 sleep 10
               done
