@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Have coredns-adopter poll the apiserver until it's ready before starting
+
 ## [0.6.3] - 2022-10-19
 
 ### Changed
