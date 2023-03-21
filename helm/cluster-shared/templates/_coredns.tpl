@@ -261,7 +261,7 @@ data:
           serviceAccountName: coredns-adopter
           tolerations:
           - operator: Exists
-          hostNetwork: false # No need to wait for CNI to be ready
+          hostNetwork: false 
           containers:
           - name: kubectl
             image: "{{ include "cluster-shared.kubectl-image" . }}"
