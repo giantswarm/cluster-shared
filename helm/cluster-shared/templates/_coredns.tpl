@@ -261,19 +261,7 @@ data:
           serviceAccountName: coredns-adopter
           tolerations:
           - operator: Exists
-          hostNetwork: true # No need to wait for CNI to be ready
-          initContainers:
-          - name: wait-for-apiserver
-            image: "{{ include "cluster-shared.kubectl-image" . }}"
-            command:
-            - bash
-            - -c
-            - |
-              set -e
-              while [[ "$(kubectl -n default get service kubernetes -o name 2>/dev/null)" != "service/kubernetes" ]]; do
-                echo "Waiting for API server to be ready..."
-                sleep 10
-              done
+          hostNetwork: false # No need to wait for CNI to be ready
           containers:
           - name: kubectl
             image: "{{ include "cluster-shared.kubectl-image" . }}"
