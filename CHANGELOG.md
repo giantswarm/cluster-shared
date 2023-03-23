@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Disable host networking and remove init container
+
 ## [0.6.4] - 2022-11-08
 
 ### Fixed
