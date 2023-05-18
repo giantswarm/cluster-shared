@@ -47,6 +47,8 @@ data:
       name: restricted
       labels:
         {{- include "labels.common" . | nindent 8 }}
+      annotations:
+        seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
     spec:
       privileged: false
       allowPrivilegeEscalation: false
