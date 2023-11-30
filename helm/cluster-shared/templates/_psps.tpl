@@ -225,7 +225,7 @@ data:
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata:
-      name: privileged-psp-users
+      name: privileged-psp-allow-all
       labels:
         {{- include "labels.common" . | nindent 8 }}
     subjects:
