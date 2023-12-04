@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add switches to disable and migrate PSPs.
+
 ## [0.6.5] - 2023-05-31
 
 ### Added
