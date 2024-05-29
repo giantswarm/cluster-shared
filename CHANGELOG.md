@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Patch coredns PDB in coredns-adopter job. This fixes coredns not being adopted on EKS clusters.
+
 ## [0.7.0] - 2023-12-04
 
 ### Changed
