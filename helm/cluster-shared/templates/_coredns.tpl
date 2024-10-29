@@ -233,6 +233,28 @@ data:
       name: system:coredns
       apiGroup: rbac.authorization.k8s.io
     ---
+    apiVersion: kyverno.io/v1
+    kind: PolicyException
+    metadata:
+      name: coredns-adopter-exception
+      namespace: kube-system
+      labels:
+        {{- include "labels.common" . | nindent 4 }}
+    spec:
+      exceptions:
+      - policyName: disallow-host-namespaces
+        ruleNames:
+        - autogen-host-namespaces
+      match:
+        any:
+        - resources:
+            kinds:
+            - Job
+            names:
+            - coredns-adopter
+            namespaces:
+            - kube-system
+    ---
     apiVersion: batch/v1
     kind: Job
     metadata:
