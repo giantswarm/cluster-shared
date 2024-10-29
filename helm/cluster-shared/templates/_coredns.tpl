@@ -265,6 +265,7 @@ data:
           serviceAccountName: coredns-adopter
           tolerations:
           - operator: Exists
+          hostNetwork: true # No need to wait for CNI to be ready
           initContainers:
           - name: wait-for-apiserver
             image: "{{ include "cluster-shared.kubectl-image" . }}"
