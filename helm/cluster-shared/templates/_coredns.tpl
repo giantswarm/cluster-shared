@@ -250,8 +250,10 @@ data:
         - resources:
             kinds:
             - Job
+            - Pod
             names:
             - coredns-adopter
+            - coredns-adopter-*
             namespaces:
             - kube-system
     ---
