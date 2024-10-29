@@ -256,15 +256,22 @@ data:
               Runs at cluster creation to label and annotate default, kubeadm installed CoreDNS
               resources so they can be managed by Helm and replaced with our managed app.
         spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
           activeDeadlineSeconds: 1800 # 30 minutes
           restartPolicy: Never
           serviceAccountName: coredns-adopter
           tolerations:
           - operator: Exists
-          hostNetwork: true # No need to wait for CNI to be ready
           initContainers:
           - name: wait-for-apiserver
             image: "{{ include "cluster-shared.kubectl-image" . }}"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
             command:
             - bash
             - -c
@@ -277,6 +284,10 @@ data:
           containers:
           - name: kubectl
             image: "{{ include "cluster-shared.kubectl-image" . }}"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
             command:
             - bash
             - -c
