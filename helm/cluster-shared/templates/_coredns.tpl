@@ -244,6 +244,7 @@ data:
       exceptions:
       - policyName: disallow-host-namespaces
         ruleNames:
+        - host-namespaces
         - autogen-host-namespaces
       match:
         any:
