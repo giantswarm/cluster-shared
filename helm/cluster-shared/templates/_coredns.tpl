@@ -233,6 +233,31 @@ data:
       name: system:coredns
       apiGroup: rbac.authorization.k8s.io
     ---
+    apiVersion: kyverno.io/v1
+    kind: PolicyException
+    metadata:
+      name: coredns-adopter-exception
+      namespace: kube-system
+      labels:
+        {{- include "labels.common" . | nindent 4 }}
+    spec:
+      exceptions:
+      - policyName: disallow-host-namespaces
+        ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+      match:
+        any:
+        - resources:
+            kinds:
+            - Job
+            - Pod
+            names:
+            - coredns-adopter
+            - coredns-adopter-*
+            namespaces:
+            - kube-system
+    ---
     apiVersion: batch/v1
     kind: Job
     metadata:
@@ -256,6 +281,10 @@ data:
               Runs at cluster creation to label and annotate default, kubeadm installed CoreDNS
               resources so they can be managed by Helm and replaced with our managed app.
         spec:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
           activeDeadlineSeconds: 1800 # 30 minutes
           restartPolicy: Never
           serviceAccountName: coredns-adopter
@@ -265,6 +294,10 @@ data:
           initContainers:
           - name: wait-for-apiserver
             image: "{{ include "cluster-shared.kubectl-image" . }}"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
             command:
             - bash
             - -c
@@ -277,6 +310,10 @@ data:
           containers:
           - name: kubectl
             image: "{{ include "cluster-shared.kubectl-image" . }}"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              allowPrivilegeEscalation: false
             command:
             - bash
             - -c
