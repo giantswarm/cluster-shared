@@ -1,5 +1,5 @@
 {{ define "coredns" }}
-{{- if or (.Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta1/ClusterResourceSet") (.Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta2/ClusterResourceSet") }}
+{{- if .Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta2/ClusterResourceSet" }}
 {{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 ---
 apiVersion: v1
