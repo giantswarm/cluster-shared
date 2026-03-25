@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Update ClusterResourceSet API version from `v1beta1` to `v1beta2` and support both versions in capability checks.
+
 ## [0.7.1] - 2024-05-29
 
 ### Fixed

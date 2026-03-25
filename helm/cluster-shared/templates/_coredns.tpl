@@ -1,5 +1,5 @@
 {{ define "coredns" }}
-{{- if .Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta1/ClusterResourceSet" }}
+{{- if or (.Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta1/ClusterResourceSet") (.Capabilities.APIVersions.Has "addons.cluster.x-k8s.io/v1beta2/ClusterResourceSet") }}
 {{- if eq (include "cluster-shared.clusterresourceset.enabled" .) "true" }}
 ---
 apiVersion: v1
@@ -336,7 +336,7 @@ data:
 
               echo "CoreDNS adoption complete!"
 ---
-apiVersion: addons.cluster.x-k8s.io/v1beta1
+apiVersion: addons.cluster.x-k8s.io/v1beta2
 kind: ClusterResourceSet
 metadata:
   name: {{ include "resource.default.name" . }}-coredns
