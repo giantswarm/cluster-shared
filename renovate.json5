@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "github>giantswarm/renovate-presets:default.json5",
+    ":reviewer(team:team-hydra)"
+  ],
+  "schedule": [
+    "after 6am on thursday"
+  ]
+}
