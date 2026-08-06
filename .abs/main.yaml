@@ -3,3 +3,7 @@ generate-metadata: true
 chart-dir: ./helm/cluster-shared
 destination: ./build
 disable-giantswarm-helm-validator: true
+# Temporary: app-build-suite 2.2.0 runs `helm template` on every chart, which fails here with
+# "library charts are not installable" because this is a library chart. Remove this line once
+# app-build-suite ships the automatic library-chart skip (giantswarm/app-build-suite#582).
+disable-helm-template-validator: true
